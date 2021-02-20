@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="{{ url_for('static', filename='css/index_style.css') }}" rel="stylesheet" type="text/css"/>
+    <title>insta485</title>
+</head>
+<body>
+<table class="first-line">
+    <tr>
+        <td class="first-line" id="ul-link"><a href="/">^_^ &nbsp;&nbsp;| &nbsp;&nbsp;Insta485</a></td>
+        <td class="first-line"><a href="/explore/">explore</a> &nbsp;&nbsp;| &nbsp;&nbsp;<a href="/u/{{logname}}/">{{logname}}</a></td>
+    </tr>
+</table>
+<hr />
+{% for post in posts %}
+    <ul class="content">
+        <li>
+            <table class="users">
+                <tr>
+                    <td>
+                        <a href="/u/{{ post['owner'] }}/" class="user-name">
+                            <img src="{{ url_for('get_img', filename = post['owner_img_url']) }}" width="50" height="50"
+                                 alt="err"></a>
+                        <a href="/u/{{ post['owner'] }}/" class="user-name">{{ post['owner'] }}</a>
+                    </td>
+                    <td><a href="/p/{{ post['postid'] }}/" class="time">{{ post['timestamp'] }}</a></td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="image"><img src="{{ url_for('get_img', filename = post['img_url']) }}" width="300"
+                                                height="300" alt="err">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>
+                                <div class="likes">
+                                    {{ post['likes'] }}{% if post['likes'] == 1 %} like {% else %}
+                                        likes {% endif %}</div>
+                            </li>
+                            {% for comment in post['comments'] %}
+                                <li>
+                                    <a href="/u/{{ comment['owner'] }}/" class="user-name">{{ comment['owner'] }} </a>
+                                    <div class="comments">{{ comment['text'] }}</div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if post['islike'] == 1 %}
+                            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                            <form action="/likes/?target=/" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="operation" value="unlike"/>
+                            <input type="hidden" name="postid" value="{{post['postid']}}"/>
+                            <input type="submit" name="unlike" value="unlike"/>
+                        </form>
+                    {% else %}
+                        <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                        <form action="/likes/?target=/" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="operation" value="like"/>
+                            <input type="hidden" name="postid" value="{{post['postid']}}"/>
+                            <input type="submit" name="like" value="like"/>
+                        </form>
+                    {% endif %}
+                </td>
+             </tr>
+             <tr>
+                 <td>
+                     <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
+                    <form action="/comments/?target=/" method="post" enctype="multipart/form-data">
+                        <input type="hidden" name="operation" value="create"/>
+                        <input type="hidden" name="postid" value="{{post['postid']}}"/>
+                        <input type="text" name="text" required/>
+                        <input type="submit" name="comment" value="comment"/>
+                    </form>
+                 </td>
+             </tr>
+         </table>
+    </li>
+</ul>
+{% endfor %}
+</body>
+</html>

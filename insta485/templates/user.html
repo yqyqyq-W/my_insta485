@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>insta485</title>
+</head>
+<body>
+<div class="headers">
+    <a class="top" href="/">insta485</a>
+    <div class="rightHeaders">
+        <a class="tt" href="/explore/">explore</a> |
+        <a class="tt" href="/u/{{ logname }}/">{{ logname }}</a>
+    </div>
+</div>
+<hr>
+<div class="relationship">
+    <div class="username">{{ username }}</div>
+    {% if log_follows_user %}
+        following
+        <form action="/following/?target=/u/{{ username }}/" method="post" enctype="multipart/form-data">
+            <input type="submit" name="unfollow" value="unfollow"/>
+            <input type="hidden" name="username" value="{{ username }}"/>
+            <input type="hidden" name="operation" value="unfollow"/>
+        </form><br>
+    {% elif username != logname %}
+        not following
+        <form action="/following/?target=/u/{{ username }}/" method="post" enctype="multipart/form-data">
+            <input type="submit" name="follow" value="follow"/>
+            <input type="hidden" name="username" value="{{ username }}"/>
+            <input type="hidden" name="operation" value="follow"/>
+        </form><br>
+    {% else %}
+        <a class="edit" href="/accounts/edit/">Edit profile</a><br>
+        <form action="/accounts/logout/" method="post" enctype="multipart/form-data">
+            <input type="submit" name="logout" value="Logout"/>
+        </form>
+    {% endif %}
+    {{ total_posts }}{% if total_posts == 1 %} post {% else %} posts {% endif %}
+    <a class="followers" href="/u/{{ username }}/followers/">
+        {{ followers }}{% if followers == 1 %} follower {% else %} followers {% endif %}</a>
+    <a class="following" href="/u/{{ username }}/following/">{{ following }} following </a><br>
+    {{ fullname }}<br><br>
+    {% if username == logname %}
+        <form action="/posts/?target=/u/{{ username }}/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" required/>
+            <input type="submit" name="create_post" value="upload new post"/>
+            <input type="hidden" name="operation" value="create"/>
+        </form>
+    {% endif %}
+    {% for post in posts %}
+        <a href="/p/{{ post.postid }}/"><img class="postImage" src="{{ url_for('get_img', filename = post.filename) }}"
+                                             alt="null"></a>
+    {% endfor %}
+</div>
+</body>
+</html>

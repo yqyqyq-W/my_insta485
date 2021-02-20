@@ -1,0 +1,30 @@
+.firstline{
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+}
+
+a{
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+.signup, .login{
+    display: flex;
+    justify-content: flex-start;
+}
+
+.signup{
+    font-size: 20px;
+    margin-left: 100px;
+}
+
+.username, .psw, .submit{
+    margin-bottom: 30px;
+    margin-left: 100px;
+}
+
+.username{
+    margin-top: 100px;
+}

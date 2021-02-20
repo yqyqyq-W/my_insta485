@@ -1,0 +1,88 @@
+.top {
+    position: static;
+    border: 3pt;
+    font-size: 30pt;
+    font-family: YouYuan, Microsoft JhengHei, LiSu;
+    font-weight: 900;
+    color: blue;
+}
+
+.rightHeaders {
+    position: absolute;
+    top: 2%;
+    right: 3%;
+    border: 3pt;
+    font-size: 15pt;
+    color: black;
+    font-weight: bold;
+    font-family: Arial, Microsoft JhengHei, sans-serif;
+}
+
+hr {
+    position: static;
+    top: 55pt;
+    width: 99%;
+}
+
+.tt {
+    color: black;
+}
+
+.postImage {
+    width: 28%;
+    height: 28%;
+}
+
+.userImage {
+    width: 3%;
+    height: 3%;
+}
+
+.post {
+    margin: 1% 0 3%;
+    border: 1pt;
+    position: relative;
+    left: 36%;
+    font-family: Arial, Microsoft JhengHei, sans-serif;
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.users {
+    color: black;
+}
+
+.sub {
+    font-family: Arial, Microsoft JhengHei, sans-serif;
+    font-size: 12pt;
+    border: 5pt;
+    color: black;
+}
+
+.t {
+    color: black;
+    font-weight: bold;
+}
+
+.relationship {
+    position: relative;
+    left: 10%;
+    color: black;
+    font-size: 15pt;
+    line-height: 150%;
+}
+
+.username {
+    font-size: 20pt;
+    font-weight: bold;
+}
+
+.followers {
+    font-weight: bold;
+    color: black;
+}
+
+.following {
+    font-weight: bold;
+    color: black;
+}
