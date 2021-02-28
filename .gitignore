@@ -10,12 +10,12 @@ submit.tar.gz
 submit.tar.xz
 starter_files.tar.gz
 starter_files.tar.xz
-
+npm-debug.log
 # EECS 485 Project 1
 /insta485/html/
 /hello/html/
 /hello_css/html/
-
+anyconnect-linux/
 # EECS 485 Project 2
 *.pem
 *.db
@@ -72,3 +72,5 @@ Icon
 .idea/
 .git/
 insta485.egg-info/
+
+session.json
