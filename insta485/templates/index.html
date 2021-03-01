@@ -51,30 +51,18 @@
                 </tr>
                 <tr>
                     <td>
-                        {% if post['islike'] == 1 %}
-                            <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
-                            <form action="/likes/?target=/" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="operation" value="unlike"/>
-                            <input type="hidden" name="postid" value="{{post['postid']}}"/>
-                            <input type="submit" name="unlike" value="unlike"/>
-                        </form>
-                    {% else %}
                         <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
-                        <form action="/likes/?target=/" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="operation" value="like"/>
-                            <input type="hidden" name="postid" value="{{post['postid']}}"/>
-                            <input type="submit" name="like" value="like"/>
-                        </form>
-                    {% endif %}
+                        <button className="like-unlike-button">
+                            FIXME-button-text-here
+                        </button>
                 </td>
              </tr>
              <tr>
                  <td>
                      <!-- DO NOT CHANGE THIS (aside from where we say 'FIXME') -->
-                    <form action="/comments/?target=/" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="operation" value="create"/>
+                    <form class="comment-form" action="/api/v1/p/{{post['postid']}}/comments/" method="post" enctype="multipart/form-data">s
                         <input type="hidden" name="postid" value="{{post['postid']}}"/>
-                        <input type="text" name="text" required/>
+                        <input type="text" value=""/>
                         <input type="submit" name="comment" value="comment"/>
                     </form>
                  </td>
