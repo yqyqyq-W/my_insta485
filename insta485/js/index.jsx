@@ -30,12 +30,14 @@ class Index extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  // TODO: response time
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { postsUrl } = this.state;
     // Render number of post image and post owner
     return (
+      // TODO:infinite scroll
       <div>
         <Posts url={postsUrl} />
       </div>
