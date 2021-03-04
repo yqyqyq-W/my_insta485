@@ -64,10 +64,10 @@ class Posts extends React.Component {
     // and this.state.owner to the const variable owner
     const { posts, length } = this.state;
     if (!length) {
-      const { renderedPost } = this.getPost(posts[0].postid, posts[0].url);
+      const { renderedPost } = Posts.getPost(posts[0].postid, posts[0].url);
       let i = 1;
       for (;i < posts.length; i += 1) {
-        renderedPost.append(this.getPost(posts[i].postid, posts[i].url));
+        renderedPost.append(Posts.getPost(posts[i].postid, posts[i].url));
       }
 
       return (
