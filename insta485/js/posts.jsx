@@ -26,6 +26,14 @@ class Posts extends React.Component {
   /* Display number of image and post owner of a single post
    */
 
+  static getPost(postid, link) {
+    return (
+      <div>
+        <Post url={link} postid={postid} />
+      </div>
+    );
+  }
+
   constructor(props) {
     // Initialize mutable state
     super(props);
@@ -49,14 +57,6 @@ class Posts extends React.Component {
         });
       })
       .catch((error) => console.log(error));
-  }
-
-  static getPost(postid, link) {
-    return (
-      <div>
-        <Post url={link} postid={postid} />
-      </div>
-    );
   }
 
   render() {

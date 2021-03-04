@@ -18,6 +18,11 @@ class Post extends React.Component {
   /* Display number of image and post owner of a single post
    */
 
+  static doubleHandle() {
+    Likes.likeHandle();
+    // this.setState((preState) => ({ likeUrl: preState.likeUrl }));
+  }
+
   constructor(props) {
     // Initialize mutable state
     super(props);
@@ -51,11 +56,6 @@ class Post extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  double_handle(){
-      Likes.like_handle();
-      this.setState({likeUrl: this.state.likeUrl});
-  }
-
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
@@ -72,7 +72,7 @@ class Post extends React.Component {
         <a href={postUrl}>
           <div className="sub">{ age }</div>
         </a>
-        <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.double_handle}/>
+        <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.doubleHandle} />
         <Likes url={likeUrl} />
         <br />
         <br />

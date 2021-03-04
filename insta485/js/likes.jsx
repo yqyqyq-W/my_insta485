@@ -16,7 +16,7 @@ class Likes extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { lognameLikes: 0, count: 0, postid: 0 };
+    this.state = { lognameLikes: 0, count: 0 };
   }
 
   componentDidMount() {
@@ -32,51 +32,51 @@ class Likes extends React.Component {
         this.setState({
           lognameLikes: data.logname_likes_this,
           count: data.likes_count,
-          postid: data.postid,
         });
       })
       .catch((error) => console.log(error));
   }
 
-  //handler for like&unlike
-  unlike_handle(){
+  // // for double_click
+  // UNSAFEComponentWillReceiveProps() {
+  //   this.setState((preState) => ({ count: preState.count + 1 }));
+  // }
+
+  // handler for like&unlike
+  unlikeHandle() {
     const { url } = this.props;
-    fetch(url, {credentials: 'same-origin', method:'DELETE'})
-        .then((response) => {
+    fetch(url, { credentials: 'same-origin', method: 'DELETE' })
+      .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
-        })
-        .catch((error) => console.log(error));
-    this.setState({count: this.state.count - 1});
+      })
+      .catch((error) => console.log(error));
+    this.setState((preState) => ({ count: preState.count - 1 }));
   }
 
-  like_handle(){
+  likeHandle() {
     const { url } = this.props;
-    fetch(url, {credentials: 'same-origin', method:'POST'})
-        .then((response) => {
+    fetch(url, { credentials: 'same-origin', method: 'POST' })
+      .then((response) => {
         if (!response.ok && response.status !== 409) throw Error(response.statusText);
         return response.json();
-        })
-        .catch((error) => console.log(error));
-    this.setState({count: this.state.count + 1});
-  }
-  //for double_click
-  componentWillReceiveProps(){
-    this.setState({count: this.state.count + 1});
+      })
+      .catch((error) => console.log(error));
+    this.setState((preState) => ({ count: preState.count + 1 }));
   }
 
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
-    const { lognameLikes, count, postid } = this.state;
+    const { lognameLikes, count } = this.state;
     // TODO: lognameLikes value based on restApi
     let button = null;
     if (lognameLikes === 1) {
-      //unlike button
-      button = <button className="like-unlike-button" onClick={this.unlike_handle}>unlike</button>;
+      // unlike button
+      button = <button type="button" className="like-unlike-button" onClick={this.unlikeHandle}>unlike</button>;
     } else {
-      //like button
-      button = <button className="like-unlike-button" onClick={this.like_handle}>like</button>;
+      // like button
+      button = <button type="button" className="like-unlike-button" onClick={this.likeHandle}>like</button>;
     }
 
     const tmp = (count === 1) ? 'like' : 'likes';

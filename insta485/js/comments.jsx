@@ -36,7 +36,7 @@ class Comments extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { comments: [], length: 0};
+    this.state = { comments: [], length: 0 };
   }
 
   componentDidMount() {
@@ -69,19 +69,19 @@ class Comments extends React.Component {
     );
   }
 
-  update_post(event){
+  updatePost(event) {
     const { url } = this.props;
     event.preventDefault();
-    fetch(url, {credentials: 'same-origin', method:'POST', text: event.target.value})
-        .then((response) => {
+    fetch(url, { credentials: 'same-origin', method: 'POST', text: event.target.value })
+      .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
-        })
-        .then((data) => {
-            this.setState({comments: this.state.comment.append(data)})
-        })
-        .catch((error) => console.log(error));
-    this.setState({length: this.state.length + 1});
+      })
+      .then((data) => {
+        this.setState((preState) => ({ comments: preState.comment.append(data) }));
+      })
+      .catch((error) => console.log(error));
+    this.setState((preState) => ({ length: preState.length + 1 }));
   }
 
   render() {
@@ -101,8 +101,8 @@ class Comments extends React.Component {
     return (
       <div>
         { tmp }
-        <form className="comment-form" onSubmit={(e)=>this.update_post(e)}>
-          <input type="text" value=""/>
+        <form className="comment-form" onSubmit={(e) => this.updatePost(e)}>
+          <input type="text" value="" />
         </form>
       </div>
     );
@@ -112,5 +112,4 @@ class Comments extends React.Component {
 Comments.propTypes = {
   url: PropTypes.string.isRequired,
 };
-
 export default Comments;
