@@ -52,7 +52,7 @@ class Post extends React.Component {
   }
 
   doubleHandle() {
-      this.setState((preState) => ({ doubleClick: preState.doubleClick}))
+      this.setState((preState) => ({ doubleClick: preState.doubleClick + 1}))
   }
 
   render() {
