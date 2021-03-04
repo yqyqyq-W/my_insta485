@@ -21,7 +21,7 @@ class Likes extends React.Component {
 
   componentDidMount() {
     // This line automatically assigns this.props.url to the const variable url
-    const { url } = this.props;
+    const url  = this.props.url;
 
     fetch(url, { credentials: 'same-origin' })
       .then((response) => {
@@ -37,14 +37,13 @@ class Likes extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  // // for double_click
-  // UNSAFEComponentWillReceiveProps() {
-  //   this.setState((preState) => ({ count: preState.count + 1 }));
-  // }
+  componentDidUpdate() {
+    this.likeHandle();
+  }
 
   // handler for like&unlike
   unlikeHandle() {
-    const { url } = this.props;
+    const url  = this.props.url;
     fetch(url, { credentials: 'same-origin', method: 'DELETE' })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
@@ -55,7 +54,7 @@ class Likes extends React.Component {
   }
 
   likeHandle() {
-    const { url } = this.props;
+    const url  = this.props.url
     fetch(url, { credentials: 'same-origin', method: 'POST' })
       .then((response) => {
         if (!response.ok && response.status !== 409) throw Error(response.statusText);
@@ -93,6 +92,7 @@ class Likes extends React.Component {
 
 Likes.propTypes = {
   url: PropTypes.string.isRequired,
+  indicator1: PropTypes.number.isRequired,
 };
 
 export default Likes;
