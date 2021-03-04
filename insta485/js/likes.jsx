@@ -38,15 +38,45 @@ class Likes extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  //handler for like&unlike
+  unlike_handle(){
+    const { url } = this.props;
+    fetch(url, {credentials: 'same-origin', method:'DELETE'})
+        .then((response) => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+        })
+        .catch((error) => console.log(error));
+    this.setState({count: this.state.count - 1});
+  }
+
+  like_handle(){
+    const { url } = this.props;
+    fetch(url, {credentials: 'same-origin', method:'POST'})
+        .then((response) => {
+        if (!response.ok && response.status !== 409) throw Error(response.statusText);
+        return response.json();
+        })
+        .catch((error) => console.log(error));
+    this.setState({count: this.state.count + 1});
+  }
+  //for double_click
+  componentWillReceiveProps(){
+    this.setState({count: this.state.count + 1});
+  }
+
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { lognameLikes, count, postid } = this.state;
     // TODO: lognameLikes value based on restApi
+    let button = null;
     if (lognameLikes === 1) {
-      // TODO: unlike button
+      //unlike button
+      button = <button className="like-unlike-button" onClick={this.unlike_handle}>unlike</button>;
     } else {
-      // TODO: like button
+      //like button
+      button = <button className="like-unlike-button" onClick={this.like_handle}>like</button>;
     }
 
     const tmp = (count === 1) ? 'like' : 'likes';
@@ -55,6 +85,7 @@ class Likes extends React.Component {
       <div className="sub">
         <p>{ count }</p>
         <p>{ tmp }</p>
+        <div>{ button }</div>
       </div>
     );
   }

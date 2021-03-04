@@ -51,6 +51,11 @@ class Post extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  double_handle(){
+      Likes.like_handle();
+      this.setState({likeUrl: this.state.likeUrl});
+  }
+
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
@@ -67,7 +72,7 @@ class Post extends React.Component {
         <a href={postUrl}>
           <div className="sub">{ age }</div>
         </a>
-        <img className="postImage" src={imgUrl} alt="null" />
+        <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.double_handle}/>
         <Likes url={likeUrl} />
         <br />
         <br />
