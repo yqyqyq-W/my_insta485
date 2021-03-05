@@ -101,11 +101,11 @@ def post_comments(postid):
 
     connection = insta485.model.get_db()
     cur_context = connection.execute(
-        "SELECT MAX(commentid)"
+        "SELECT MAX(commentid) AS commentid"
         " FROM comments"
     )
     commentid = cur_context.fetchall()
-    commentid = 1 if not commentid else commentid["commentid"] + 1
+    commentid = 1 if not commentid else commentid[0]["commentid"] + 1
 
     context = {
         "commentid": commentid,

@@ -28,7 +28,7 @@ class Posts extends React.Component {
    */
 
   static getPost(postid, link) {
-    console.log('static getPost', postid, link);
+    // console.log('static getPost', postid, link);
     if (link !== '') {
       return (
         <li key={postid}>
@@ -56,12 +56,12 @@ class Posts extends React.Component {
         return response.json();
       })
       .then((data) => {
-        console.log('start setstate');
+        // console.log('start setstate');
         this.setState({
           posts: data.results,
           length: data.results.length,
         });
-        console.log('setstate success');
+        // console.log('setstate success');
       })
       .catch((error) => console.log(error));
   }
@@ -70,8 +70,8 @@ class Posts extends React.Component {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { posts, length } = this.state;
-    console.log(length);
-    console.log(posts[0].postid);
+    // console.log(length);
+    // console.log(posts[0].postid);
     let renderedPost = [];
     if (length && posts.length !== 0) {
       // const renderedPost = Posts.getPost(posts[0].postid, posts[0].url);

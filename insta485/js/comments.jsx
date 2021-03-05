@@ -69,14 +69,15 @@ class Comments extends React.Component {
 
   getComment(index) {
     const { comments } = this.state;
+    console.log('start getcomment');
     if (comments.length > index) {
       return (
-        <ul key={comments[index].commentid}>
+        <li key={comments[index].commentid}>
           <a className="t" href={comments[index].owner_show_url}>{comments[index].owner}</a>
           <p>{ comments[index].text }</p>
           <br />
           <br />
-        </ul>
+        </li>
       );
     }
     return (<h1>GetComment Loading</h1>);
@@ -85,13 +86,17 @@ class Comments extends React.Component {
   updatePost(event) {
     const { url } = this.props;
     event.preventDefault();
-    fetch(url, { credentials: 'same-origin', method: 'POST', text: event.target.value })
+    console.log('event.target.value', event.target.value);
+    fetch(url, {
+      credentials: 'same-origin', method: 'POST', text: event.target.value, headers: { 'Content-Type': 'application/json' },
+    })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-        this.setState((preState) => ({ comments: preState.comment.append(data) }));
+        console.log('updatePost setstate');
+        this.setState((preState) => ({ comments: preState.comment.push(data) }));
       })
       .catch((error) => console.log(error));
     this.setState((preState) => ({ length: preState.length + 1 }));
@@ -103,12 +108,13 @@ class Comments extends React.Component {
     const { length } = this.state;
 
     let tmp = [];
-    if (!length) {
+    if (length) {
       let i = 0;
       for (; i < length; i += 1) {
         tmp.push(this.getComment(i));
       }
     }
+    // console.log(length);
     // TODO:add comment update html
 
     return (
@@ -117,7 +123,7 @@ class Comments extends React.Component {
           { tmp }
         </ul>
         <form className="comment-form" onSubmit={(e) => this.updatePost(e)}>
-          <input type="text" value="" />
+          <input type="text" value=" " />
         </form>
       </div>
     );
