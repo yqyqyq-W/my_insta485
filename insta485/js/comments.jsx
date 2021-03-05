@@ -44,6 +44,7 @@ class Comments extends React.Component {
         owner_show_url: '',
         postid: 0,
         text: '',
+        inputVal: '',
       }],
       length: 0,
     };
@@ -102,6 +103,10 @@ class Comments extends React.Component {
     this.setState((preState) => ({ length: preState.length + 1 }));
   }
 
+  handleChange(event){
+    this.setState({inputVal:event.target.value})
+  }
+
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
@@ -123,7 +128,7 @@ class Comments extends React.Component {
           { tmp }
         </ul>
         <form className="comment-form" onSubmit={(e) => this.updatePost(e)}>
-          <input type="text" value=" " />
+          <input type="text" value={this.state.inputVal} onChange={this.handleChange}/>
         </form>
       </div>
     );
