@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="{{ url_for('static', filename='css/index_style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css"/>
     <title>insta485</title>
 </head>
 <body>
-<table class="first-line">
-    <tr>
-        <td class="first-line" id="ul-link"><a href="/">^_^ &nbsp;&nbsp;| &nbsp;&nbsp;Insta485</a></td>
-        <td class="first-line"><a href="/explore/">explore</a> &nbsp;&nbsp;| &nbsp;&nbsp;<a href="/u/{{logname}}/">{{logname}}</a></td>
-    </tr>
-</table>
+<div class="headers">
+    <a class="top" href="/"> insta485</a>
+    <div class="rightHeaders">
+        <a class="tt" href="/explore/">explore</a> |
+        <a class="tt" href="/u/{{ logname }}/">{{ logname }}</a>
+    </div>
+</div>
+<hr>
   <div id="reactEntry">
     Loading ...
   </div>

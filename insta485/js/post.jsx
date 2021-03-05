@@ -67,24 +67,25 @@ class Post extends React.Component {
     } = this.state;
     console.log('post render');
     // Render number of post image and post owner
-    return (
-      <div className="post">
-        <a className="users" href={ownerUrl}>
-          <img className="userImage" src={ownerImgUrl} alt="null" />
-          <p>{ owner }</p>
-        </a>
-        <a href={postUrl}>
-          <div className="sub">{ age }</div>
-        </a>
-        <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.doubleHandle} />
-        <Likes url={likeUrl} />
-        <br />
-        <br />
-        <Comments url={commentsUrl} />
-        <br />
-        <br />
-      </div>
-    );
+    if (likeUrl !== '' && commentsUrl !== '') {
+      return (
+        <div className="post">
+          <a className="users" href={ownerUrl}>
+            <img className="userImage" src={ownerImgUrl} alt="null" />
+            <p>{ owner }</p>
+          </a>
+          <a href={postUrl} className="sub">{ age }</a>
+          <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.doubleHandle} />
+          <Likes url={likeUrl} />
+          <br />
+          <br />
+          <Comments url={commentsUrl} />
+          <br />
+          <br />
+        </div>
+      );
+    }
+    return (<h1>Post Loading</h1>);
   }
 }
 

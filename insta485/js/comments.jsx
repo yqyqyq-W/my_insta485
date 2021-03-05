@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -68,14 +69,17 @@ class Comments extends React.Component {
 
   getComment(index) {
     const { comments } = this.state;
-    return (
-      <div>
-        <a className="t" href={comments[index].owner_show_url}>{comments[index].owner}</a>
-        <p>{ comments[index].text }</p>
-        <br />
-        <br />
-      </div>
-    );
+    if (comments.length > index) {
+      return (
+        <ul key={comments[index].commentid}>
+          <a className="t" href={comments[index].owner_show_url}>{comments[index].owner}</a>
+          <p>{ comments[index].text }</p>
+          <br />
+          <br />
+        </ul>
+      );
+    }
+    return (<h1>GetComment Loading</h1>);
   }
 
   updatePost(event) {
@@ -98,18 +102,20 @@ class Comments extends React.Component {
     // and this.state.owner to the const variable owner
     const { length } = this.state;
 
-    let tmp;
+    let tmp = [];
     if (!length) {
       let i = 0;
       for (; i < length; i += 1) {
-        tmp.append(this.getComment(i));
+        tmp.push(this.getComment(i));
       }
     }
     // TODO:add comment update html
-    tmp.append(<div />);
+
     return (
       <div>
-        { tmp }
+        <ul>
+          { tmp }
+        </ul>
         <form className="comment-form" onSubmit={(e) => this.updatePost(e)}>
           <input type="text" value="" />
         </form>
