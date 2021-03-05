@@ -20,6 +20,7 @@ class Post extends React.Component {
 
   constructor(props) {
     // Initialize mutable state
+    console.log('post start ctor');
     super(props);
     this.state = {
       imgUrl: '', owner: '', ownerImgUrl: '', age: '', ownerUrl: '', postUrl: '', likeUrl: '', doubleClick: 0,
@@ -33,10 +34,12 @@ class Post extends React.Component {
     // Call REST API to get the post's information
     fetch(url, { credentials: 'same-origin' })
       .then((response) => {
+        console.log('after fetch error');
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
+        console.log('after fetch');
         this.setState({
           imgUrl: data.img_url,
           owner: data.owner,
@@ -61,6 +64,7 @@ class Post extends React.Component {
     const {
       imgUrl, owner, ownerImgUrl, age, ownerUrl, postUrl, likeUrl, commentsUrl, doubleClick
     } = this.state;
+    console.log('post render');
     // Render number of post image and post owner
     return (
       <div className="post">

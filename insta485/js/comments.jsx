@@ -36,7 +36,16 @@ class Comments extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { comments: [], length: 0 };
+    this.state = {
+      comments: [{
+        commentid: 0,
+        owner: '',
+        owner_show_url: '',
+        postid: 0,
+        text: '',
+      }],
+      length: 0,
+    };
   }
 
   componentDidMount() {
