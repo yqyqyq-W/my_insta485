@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Post from './post';
@@ -27,12 +28,15 @@ class Posts extends React.Component {
    */
 
   static getPost(postid, link) {
-    console.log('static getPost');
-    return (
-      <div>
-        <Post url={link} postid={postid} />
-      </div>
-    );
+    // console.log('static getPost', postid, link);
+    if (link !== '') {
+      return (
+        <li key={postid}>
+          <Post url={link} postid={postid} />
+        </li>
+      );
+    }
+    return (<h1>GetPost Loading</h1>);
   }
 
   constructor(props) {
@@ -52,12 +56,12 @@ class Posts extends React.Component {
         return response.json();
       })
       .then((data) => {
-        console.log('start setstate');
+        // console.log('start setstate');
         this.setState({
           posts: data.results,
           length: data.results.length,
         });
-        console.log('setstate success');
+        // console.log('setstate success');
       })
       .catch((error) => console.log(error));
   }
@@ -66,23 +70,21 @@ class Posts extends React.Component {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { posts, length } = this.state;
-    console.log(length);
-    console.log(posts[0].postid);
-    if (length) {
-      const { renderedPost } = Posts.getPost(posts[0].postid, posts[0].url);
-      let i = 1;
+    // console.log(length);
+    // console.log(posts[0].postid);
+    let renderedPost = [];
+    if (length && posts.length !== 0) {
+      // const renderedPost = Posts.getPost(posts[0].postid, posts[0].url);
+      let i = 0;
       for (;i < posts.length; i += 1) {
-        renderedPost.append(Posts.getPost(posts[i].postid, posts[i].url));
+        renderedPost.push(Posts.getPost(posts[i].postid, posts[i].url));
       }
-
-      return (
-        <div>
-          { renderedPost }
-        </div>
-      );
     }
-
-    return (<div />);
+    return (
+      <ul>
+        { renderedPost }
+      </ul>
+    );
   }
 }
 

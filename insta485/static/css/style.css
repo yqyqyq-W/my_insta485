@@ -86,3 +86,47 @@ hr {
     font-weight: bold;
     color: black;
 }
+
+td.first-line{
+    text-align: right;
+}
+
+#ul-link{
+    text-align: left;
+}
+
+table.first-line{
+    width: 80%;
+    height: 8%;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.users{
+    border: 1px solid black;
+    margin: 10px auto;
+    width:50%;
+}
+
+.comments{
+    display: inline;
+}
+
+.user-name{
+    font-weight: bold;
+}
+
+.time{
+    color: gray;
+}
+
+ul{
+    list-style: none;
+}
+
+.image{
+    text-align: center;
+}

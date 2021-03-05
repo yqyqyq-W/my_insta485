@@ -1,3 +1,4 @@
+/* eslint-disable prefer-const */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -68,26 +69,34 @@ class Comments extends React.Component {
 
   getComment(index) {
     const { comments } = this.state;
-    return (
-      <div>
-        <a className="t" href={comments[index].owner_show_url}>{comments[index].owner}</a>
-        <p>{ comments[index].text }</p>
-        <br />
-        <br />
-      </div>
-    );
+    console.log('start getcomment');
+    if (comments.length > index) {
+      return (
+        <li key={comments[index].commentid}>
+          <a className="t" href={comments[index].owner_show_url}>{comments[index].owner}</a>
+          <p>{ comments[index].text }</p>
+          <br />
+          <br />
+        </li>
+      );
+    }
+    return (<h1>GetComment Loading</h1>);
   }
 
   updatePost(event) {
     const { url } = this.props;
     event.preventDefault();
-    fetch(url, { credentials: 'same-origin', method: 'POST', text: event.target.value })
+    console.log('event.target.value', event.target.value);
+    fetch(url, {
+      credentials: 'same-origin', method: 'POST', text: event.target.value, headers: { 'Content-Type': 'application/json' },
+    })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-        this.setState((preState) => ({ comments: preState.comment.append(data) }));
+        console.log('updatePost setstate');
+        this.setState((preState) => ({ comments: preState.comment.push(data) }));
       })
       .catch((error) => console.log(error));
     this.setState((preState) => ({ length: preState.length + 1 }));
@@ -98,20 +107,23 @@ class Comments extends React.Component {
     // and this.state.owner to the const variable owner
     const { length } = this.state;
 
-    let tmp;
-    if (!length) {
+    let tmp = [];
+    if (length) {
       let i = 0;
       for (; i < length; i += 1) {
-        tmp.append(this.getComment(i));
+        tmp.push(this.getComment(i));
       }
     }
+    // console.log(length);
     // TODO:add comment update html
-    tmp.append(<div />);
+
     return (
       <div>
-        { tmp }
+        <ul>
+          { tmp }
+        </ul>
         <form className="comment-form" onSubmit={(e) => this.updatePost(e)}>
-          <input type="text" value="" />
+          <input type="text" value=" " />
         </form>
       </div>
     );

@@ -46,7 +46,7 @@ def get_post(postid):
         "owner": post["owner"],
         "owner_img_url": "/uploads/{}".format(owner["filename"]),
         "owner_show_url": "/u/{}/".format(post["owner"]),
-        "postid": "/p/{}/".format(postid),
+        "post_show_url": "/p/{}/".format(postid),
         "url": request.path
     }
     print(context["owner_img_url"], context["img_url"])

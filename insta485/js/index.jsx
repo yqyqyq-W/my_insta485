@@ -26,11 +26,11 @@ class Index extends React.Component {
         return response.json();
       })
       .then((data) => {
-        console.log('index setstate');
+        // console.log('index setstate');
         this.setState({
           postsUrl: data.posts,
         });
-        console.log('index setstate success');
+        // console.log('index setstate success');
       })
       .catch((error) => console.log(error));
   }
@@ -41,9 +41,14 @@ class Index extends React.Component {
     // and this.state.owner to the const variable owner
     const { postsUrl } = this.state;
     // Render number of post image and post owner
-    console.log(postsUrl);
-    return (
+    // console.log(postsUrl);
+    if (postsUrl === '') {
+      return (
       // TODO:infinite scroll
+
+        <h1>Loading</h1>);
+    }
+    return (
       <div>
         <Posts url={postsUrl} />
       </div>
