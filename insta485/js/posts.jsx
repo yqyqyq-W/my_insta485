@@ -27,6 +27,7 @@ class Posts extends React.Component {
    */
 
   static getPost(postid, link) {
+    console.log('static getPost');
     return (
       <div>
         <Post url={link} postid={postid} />
@@ -37,7 +38,7 @@ class Posts extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { posts: [], length: 0 };
+    this.state = { posts: [{ postid: 0, url: '' }], length: 0 };
   }
 
   componentDidMount() {
@@ -51,10 +52,12 @@ class Posts extends React.Component {
         return response.json();
       })
       .then((data) => {
+        console.log('start setstate');
         this.setState({
           posts: data.results,
           length: data.results.length,
         });
+        console.log('setstate success');
       })
       .catch((error) => console.log(error));
   }
@@ -63,7 +66,9 @@ class Posts extends React.Component {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { posts, length } = this.state;
-    if (!length) {
+    console.log(length);
+    console.log(posts[0].postid);
+    if (length) {
       const { renderedPost } = Posts.getPost(posts[0].postid, posts[0].url);
       let i = 1;
       for (;i < posts.length; i += 1) {

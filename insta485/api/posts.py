@@ -1,6 +1,7 @@
 """REST API for posts."""
 import flask
 import insta485
+from insta485.api.error import InvalidUsage
 from flask import request, jsonify
 
 
@@ -28,17 +29,27 @@ def get_post(postid):
 
     post = cur_context.fetchall()
     if not len(post):
-        raise Exception("Not Found", 404)
+        raise InvalidUsage("Not Found", 404)
+    post = post[0]
+
+    cur_context = connection.execute(
+        "SELECT *"
+        " FROM users"
+        " WHERE username = ?", (post["owner"],)
+    )
+
+    owner = cur_context.fetchall()[0]
 
     context = {
         "age": post["created"],
-        "img_url": post["filename"],
+        "img_url": "/uploads/{}".format(post["filename"]),
         "owner": post["owner"],
-        "owner_img_url": "/uploads/" + post["filename"],
+        "owner_img_url": "/uploads/{}".format(owner["filename"]),
         "owner_show_url": "/u/{}/".format(post["owner"]),
         "postid": "/p/{}/".format(postid),
         "url": request.path
     }
+    print(context["owner_img_url"], context["img_url"])
     return jsonify(**context)
 
 
@@ -55,6 +66,7 @@ def get_service():
         "url": "/api/v1/"
     }
     return jsonify(**context)
+
 
 @insta485.app.route('/api/v1/p/', methods=["GET"])
 def get_ten_posts():
@@ -85,11 +97,11 @@ def get_ten_posts():
     }"""
 
     connection = insta485.model.get_db()
-    users = session["user"]
+    users = flask.session["username"]
     post_size = flask.request.args.get("size", default=10, type=int)
-    page_size = flask.request.args.get("page", default=10, type=int)
+    page_size = flask.request.args.get("page", default=0, type=int)
     if page_size < 0 or post_size < 0:
-        raise handle_invalid_usage("Bad Request", 400)
+        raise InvalidUsage("Bad Request", 400)
 
     offset = page_size * post_size
 
@@ -97,18 +109,18 @@ def get_ten_posts():
         "SELECT DISTINCT p.postid"
         " FROM posts p, users u"
         " WHERE ("
-        "p.owner = '{}'"
-        "OR p.owner IN "
-        "(SELECT username2 FROM following"
-        "WHERE username1 = '{}')"
-        "AND p.owner = u.username)"
-        "ORDER BY p.postid DESC"
-        "LIMIT {} OFFSET {}".format(str(users), str(users), post_size + 1, offset)
+        " p.owner = ?"
+        " OR p.owner IN"
+        " (SELECT username2 FROM following"
+        " WHERE username1 = ?)"
+        " AND p.owner = u.username)"
+        " ORDER BY p.postid DESC"
+        " LIMIT ? OFFSET ?", (str(users), str(users), post_size + 1, offset)
     )
 
     posts = cur_context.fetchall()
     url_next = ""
-
+    print(len(posts))
     if len(posts) == post_size + 1:
         url_next = "/api/v1/p/?size={}&page={}".format(post_size, page_size+1)
         posts.pop()
@@ -120,7 +132,7 @@ def get_ten_posts():
             "url": "/api/v1/p/{}/".format(post["postid"])
         }
         result_list.append(result)
-
+    print(len(result_list))
     context = {
         "next": url_next,
         "results": result_list,
