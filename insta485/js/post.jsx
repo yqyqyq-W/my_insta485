@@ -18,12 +18,17 @@ class Post extends React.Component {
   /* Display number of image and post owner of a single post
    */
 
+  static doubleHandle() {
+    Likes.likeHandle();
+    // this.setState((preState) => ({ likeUrl: preState.likeUrl }));
+  }
+
   constructor(props) {
     // Initialize mutable state
-    console.log('post start ctor');
+    // console.log('post start ctor');
     super(props);
     this.state = {
-      imgUrl: '', owner: '', ownerImgUrl: '', age: '', ownerUrl: '', postUrl: '', likeUrl: '', doubleClick: 0,
+      imgUrl: '', owner: '', ownerImgUrl: '', age: '', ownerUrl: '', postUrl: '', likeUrl: '',
     };
   }
 
@@ -34,12 +39,12 @@ class Post extends React.Component {
     // Call REST API to get the post's information
     fetch(url, { credentials: 'same-origin' })
       .then((response) => {
-        console.log('after fetch error');
+        // console.log('after fetch error');
         if (!response.ok) throw Error(response.statusText);
         return response.json();
       })
       .then((data) => {
-        console.log('after fetch');
+        // console.log('after fetch');
         this.setState({
           imgUrl: data.img_url,
           owner: data.owner,
@@ -54,36 +59,33 @@ class Post extends React.Component {
       .catch((error) => console.log(error));
   }
 
-  doubleHandle() {
-      this.setState((preState) => ({ doubleClick: preState.doubleClick + 1}))
-  }
-
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const {
-      imgUrl, owner, ownerImgUrl, age, ownerUrl, postUrl, likeUrl, commentsUrl, doubleClick
+      imgUrl, owner, ownerImgUrl, age, ownerUrl, postUrl, likeUrl, commentsUrl,
     } = this.state;
-    console.log('post render');
+    // console.log('post render');
     // Render number of post image and post owner
-    return (
-      <div className="post">
-        <a className="users" href={ownerUrl}>
-          <img className="userImage" src={ownerImgUrl} alt="null" />
-          <p>{ owner }</p>
-        </a>
-        <a href={postUrl}>
-          <div className="sub">{ age }</div>
-        </a>
-        <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.doubleHandle} />
-        <Likes url={likeUrl} indicator1={doubleClick}/>
-        <br />
-        <br />
-        <Comments url={commentsUrl} />
-        <br />
-        <br />
-      </div>
-    );
+    if (likeUrl !== '' && commentsUrl !== '') {
+      return (
+        <div className="post">
+          <a className="users" href={ownerUrl}>
+            <img className="userImage" src={ownerImgUrl} alt="null" />
+            <p>{ owner }</p>
+          </a>
+          <a href={postUrl} className="sub">{ age }</a>
+          <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.doubleHandle} />
+          <Likes url={likeUrl} />
+          <br />
+          <br />
+          <Comments url={commentsUrl} />
+          <br />
+          <br />
+        </div>
+      );
+    }
+    return (<h1>Post Loading</h1>);
   }
 }
 
