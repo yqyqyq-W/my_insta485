@@ -17,6 +17,8 @@ class Likes extends React.Component {
     // Initialize mutable state
     super(props);
     this.state = { lognameLikes: 0, count: 0 };
+    this.likeHandle = this.likeHandle.bind(this);
+    this.unlikeHandle = this.unlikeHandle.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +34,7 @@ class Likes extends React.Component {
         this.setState({
           lognameLikes: data.logname_likes_this,
           count: data.likes_count,
+          // link: url,
         });
       })
       .catch((error) => console.log(error));
@@ -50,7 +53,9 @@ class Likes extends React.Component {
   }
 
   likeHandle() {
+    console.log('start linkhandle');
     const { url } = this.props;
+    console.log(url);
     fetch(url, { credentials: 'same-origin', method: 'POST' })
       .then((response) => {
         if (!response.ok && response.status !== 409) throw Error(response.statusText);

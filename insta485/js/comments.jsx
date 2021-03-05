@@ -44,10 +44,12 @@ class Comments extends React.Component {
         owner_show_url: '',
         postid: 0,
         text: '',
-        inputVal: '',
       }],
+      inputVal: '',
       length: 0,
     };
+    this.handleChange = this.handleChange.bind(this);
+    this.updatePost = this.updatePost.bind(this);
   }
 
   componentDidMount() {
@@ -66,6 +68,10 @@ class Comments extends React.Component {
         });
       })
       .catch((error) => console.log(error));
+  }
+
+  handleChange(event) {
+    this.setState({ inputVal: event.target.value });
   }
 
   getComment(index) {
@@ -97,20 +103,17 @@ class Comments extends React.Component {
       })
       .then((data) => {
         console.log('updatePost setstate');
-        this.setState((preState) => ({ comments: preState.comment.push(data) }));
+        this.setState((preState) => ({ comments: preState.comments.push(data) }));
       })
       .catch((error) => console.log(error));
     this.setState((preState) => ({ length: preState.length + 1 }));
-  }
-
-  handleChange(event){
-    this.setState({inputVal:event.target.value})
   }
 
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { length } = this.state;
+    let { inputVal } = this.state;
 
     let tmp = [];
     if (length) {
@@ -127,8 +130,8 @@ class Comments extends React.Component {
         <ul>
           { tmp }
         </ul>
-        <form className="comment-form" onSubmit={(e) => this.updatePost(e)}>
-          <input type="text" value={this.state.inputVal} onChange={this.handleChange}/>
+        <form className="comment-form" onSubmit={(event) => (this.updatePost(event))}>
+          <input type="text" value={inputVal} onChange={this.handleChange} />
         </form>
       </div>
     );
