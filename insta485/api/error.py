@@ -31,6 +31,8 @@ def handle_invalid_usage(error):
 def is_login():
     """Check login."""
     if 'username' not in session:
-        if request.endpoint in ['get_likes', 'delete_likes', 'post_likes', 'get_post', 'get_comments', 'post_comments']:
+        if request.endpoint in ['get_likes', 'delete_likes', 'post_likes',
+                                'get_post', 'get_comments', 'post_comments',
+                                'get_ten_posts']:
             raise InvalidUsage('Forbidden', status_code=403)
     return None

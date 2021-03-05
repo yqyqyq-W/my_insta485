@@ -107,4 +107,5 @@ def post_likes(postid_url_slug):
             "postid": postid_url_slug,
             "status_code": 409,
         }
-        return jsonify(**context), 'CONFLICT', 409
+        # return jsonify(**context), 'CONFLICT', 409
+        return jsonify(**context)
