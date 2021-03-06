@@ -60,8 +60,8 @@ def post_comments(postid):
         "SELECT MAX(commentid) AS commentid"
         " FROM comments"
     )
-    commentid = cur_context.fetchall()
-    commentid = 1 if len(commentid) == 0 else commentid[0]["commentid"] + 1
+    commentid = cur_context.fetchall()[0]
+    commentid = 1 if not commentid["commentid"] else commentid["commentid"] + 1
 
     context = {
         "commentid": commentid,

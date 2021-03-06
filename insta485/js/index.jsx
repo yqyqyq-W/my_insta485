@@ -1,7 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
-// import Posts from './posts';
 import Post from './post';
 
 class Index extends React.Component {
@@ -10,7 +8,6 @@ class Index extends React.Component {
 
   constructor(props) {
     // Initialize mutable state
-    // console.log('index ctor');
     super(props);
 
     this.state = {
@@ -90,11 +87,7 @@ class Index extends React.Component {
           next={this.fetchData}
           hasMore={hasMore}
           loader={<h4>Loading...</h4>}
-          endMessage={(
-            <p>
-              <b>Yay! You have seen it all</b>
-            </p>
-          )}
+          endMessage={(<div />)}
         >
           <ul>
             {postList.map((item) => (

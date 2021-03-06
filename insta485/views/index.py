@@ -314,8 +314,8 @@ def posts_op():
         filename = save_file()
         cur = connection.execute(
             "SELECT MAX(postid) as largest_id FROM posts")
-        postid = cur.fetchall()
-        postid = 0 if len(postid) == 0 else postid[0]["largest_id"] + 1
+        postid = cur.fetchall()[0]
+        postid = 1 if not postid["largest_id"] else postid["largest_id"] + 1
         connection.execute(
             "INSERT INTO posts(postid, filename, owner) "
             "VALUES (?, ?, ?)", (postid, filename, logname))

@@ -41,6 +41,7 @@ VALUES ('michjc', 'jag');
 INSERT INTO following(username1, username2)
 VALUES ('jag', 'michjc');
 
+
 INSERT INTO comments(commentid, owner, postid, text)
 VALUES (1, 'awdeorio', 3, '#chickensofinstagram');
 INSERT INTO comments(commentid, owner, postid, text)
