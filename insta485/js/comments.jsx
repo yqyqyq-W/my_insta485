@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -103,9 +102,9 @@ class Comments extends React.Component {
       .then((data) => {
         console.log('updatePost setstate');
         // this.setState((preState) => ({ length: preState.length + 1 }));
-        let { comments } = this.state;
+        const { comments } = this.state;
         comments.push(data);
-        this.setState({ comments: comments, inputVal:''});
+        this.setState({ comments, inputVal: '' });
       })
       .catch((error) => console.log(error));
   }
@@ -114,9 +113,9 @@ class Comments extends React.Component {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const { comments } = this.state;
-    let { inputVal } = this.state;
+    const { inputVal } = this.state;
 
-    let tmp = [];
+    const tmp = [];
     if (comments.length) {
       let i = 0;
       for (; i < comments.length; i += 1) {

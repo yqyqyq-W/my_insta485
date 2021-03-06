@@ -1,53 +1,25 @@
 """REST API for comments."""
 import flask
-import insta485
 from flask import request, session, jsonify
+import insta485
 from insta485.api.error import InvalidUsage
 
 
 def check_postid(postid):
+    """Check postid."""
     connection = insta485.model.get_db()
     cur_context = connection.execute(
         "SELECT *"
         " FROM posts"
         " WHERE postid = ?", (postid,)
     )
-    if not len(cur_context.fetchall()):
+    if len(cur_context.fetchall()) == 0:
         raise InvalidUsage("Not Found", 404)
 
 
 @insta485.app.route('/api/v1/p/<int:postid>/comments/', methods=["GET"])
 def get_comments(postid):
-    """Return post on postid.
-
-    Example:
-    {
-  "comments": [
-    {
-      "commentid": 1,
-      "owner": "awdeorio",
-      "owner_show_url": "/u/awdeorio/",
-      "postid": 3,
-      "text": "#chickensofinstagram"
-    },
-    {
-      "commentid": 2,
-      "owner": "jflinn",
-      "owner_show_url": "/u/jflinn/",
-      "postid": 3,
-      "text": "I <3 chickens"
-    },
-    {
-      "commentid": 3,
-      "owner": "michjc",
-      "owner_show_url": "/u/michjc/",
-      "postid": 3,
-      "text": "Cute overload!"
-    }
-  ],
-  "url": "/api/v1/p/3/comments/"
-}
-    """
+    """Return post on postid."""
     if 'username' not in session:
         raise InvalidUsage('Forbidden', status_code=403)
     check_postid(postid)
@@ -59,13 +31,13 @@ def get_comments(postid):
     )
     comments = cur_context.fetchall()
     comment_list = []
-    for i in range(len(comments)):
+    for iterator in comments:
         comment = {
-            "commentid": comments[i]["commentid"],
-            "owner": comments[i]["owner"],
-            "owner_show_url": "/u/{}/".format(comments[i]["owner"]),
+            "commentid": iterator["commentid"],
+            "owner": iterator["owner"],
+            "owner_show_url": "/u/{}/".format(iterator["owner"]),
             "postid": postid,
-            "text": comments[i]["text"]
+            "text": iterator["text"]
         }
         comment_list.append(comment)
 
@@ -78,29 +50,7 @@ def get_comments(postid):
 
 @insta485.app.route('/api/v1/p/<int:postid>/comments/', methods=["POST"])
 def post_comments(postid):
-    """Return post on postid.
-
-    Example:
-    {
-  "comments": [
-    {
-      "commentid": 1,
-      "owner": "awdeorio",
-      "owner_show_url": "/u/awdeorio/",
-      "postid": 3,
-      "text": "#chickensofinstagram"
-    },
-    {
-      "commentid": 2,
-      "owner": "jflinn",
-      "owner_show_url": "/u/jflinn/",
-      "postid": 3,
-      "text": "I <3 chickens"
-    }
-  ],
-  "url": "/api/v1/p/3/comments/"
-}
-    """
+    """Return post on postid."""
     if 'username' not in session:
         raise InvalidUsage('Forbidden', status_code=403)
     check_postid(postid)

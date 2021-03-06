@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Post from './post';
@@ -78,7 +77,7 @@ class Posts extends React.Component {
     const { posts, length } = this.state;
     // console.log(length);
     // console.log(posts[0].postid);
-    let renderedPost = [];
+    const renderedPost = [];
     if (length && posts.length !== 0) {
       // const renderedPost = Posts.getPost(posts[0].postid, posts[0].url);
       let i = 0;

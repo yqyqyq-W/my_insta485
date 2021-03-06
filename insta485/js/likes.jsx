@@ -19,6 +19,7 @@ class Likes extends React.Component {
     this.state = { lognameLikes: 0, count: 0, indicator: 0 };
     this.likeHandle = this.likeHandle.bind(this);
     this.unlikeHandle = this.unlikeHandle.bind(this);
+    this.doubleClickHelper = this.doubleClickHelper.bind(this);
   }
 
   componentDidMount() {
@@ -48,8 +49,12 @@ class Likes extends React.Component {
       if (!lognameLikes) {
         this.likeHandle();
       }
-      this.setState({ indicator: indicator1 });
+      this.doubleClickHelper(indicator1);
     }
+  }
+
+  doubleClickHelper(indicator1) {
+    this.setState({ indicator: indicator1 });
   }
 
   // handler for like&unlike
