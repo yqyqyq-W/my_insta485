@@ -43,35 +43,33 @@ class Posts extends React.Component {
     // Initialize mutable state
     super(props);
     this.state = { posts: [{ postid: 0, url: '' }], length: 0 };
-    let perfEntries = window.performance.getEntriesByType('Navigation');
-    if (perfEntries === null) {
-      if (perfEntries[0].type === 'back_forward') {
-        window.history.back();
-      }
-    }
   }
 
   componentDidMount() {
     // This line automatically assigns this.props.url to the const variable url
     const { url } = this.props;
-
+    const perfEntries = String(window.performance.getEntriesByType('Navigation'));
+    if (perfEntries === 'back_forward') {
+      this.setState(window.history.state);
+    } else {
+      fetch(url, { credentials: 'same-origin' })
+        .then((response) => {
+          if (!response.ok) throw Error(response.statusText);
+          return response.json();
+        })
+        .then((data) => {
+          // console.log('start setstate');
+          this.setState({
+            posts: data.results,
+            length: data.results.length,
+          });
+          const { posts, length } = this.state;
+          window.history.pushState({ posts, length }, '', '/');
+          console.log('setstate success');
+        })
+        .catch((error) => console.log(error));
+    }
     // Call REST API to get the post's information
-    fetch(url, { credentials: 'same-origin' })
-      .then((response) => {
-        if (!response.ok) throw Error(response.statusText);
-        return response.json();
-      })
-      .then((data) => {
-        // console.log('start setstate');
-        this.setState({
-          posts: data.results,
-          length: data.results.length,
-        });
-        const { posts, length } = this.state;
-        window.history.pushState({ posts, length }, '', url);
-        // console.log('setstate success');
-      })
-      .catch((error) => console.log(error));
   }
 
   render() {
