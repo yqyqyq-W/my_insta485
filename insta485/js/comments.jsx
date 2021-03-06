@@ -46,7 +46,6 @@ class Comments extends React.Component {
         text: '',
       }],
       inputVal: '',
-      length: 0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.updatePost = this.updatePost.bind(this);
@@ -64,7 +63,6 @@ class Comments extends React.Component {
       .then((data) => {
         this.setState({
           comments: data.comments,
-          length: data.comments.length,
         });
       })
       .catch((error) => console.log(error));
@@ -92,10 +90,11 @@ class Comments extends React.Component {
 
   updatePost(event) {
     const { url } = this.props;
+    const { inputVal } = this.state;
     event.preventDefault();
     console.log('event.target.value', event.target.value);
     fetch(url, {
-      credentials: 'same-origin', method: 'POST', text: event.target.value, headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin', method: 'POST', body: JSON.stringify({ text: inputVal }), headers: { 'Content-Type': 'application/json' },
     })
       .then((response) => {
         if (!response.ok) throw Error(response.statusText);
@@ -103,22 +102,24 @@ class Comments extends React.Component {
       })
       .then((data) => {
         console.log('updatePost setstate');
-        this.setState((preState) => ({ comments: preState.comments.push(data) }));
+        // this.setState((preState) => ({ length: preState.length + 1 }));
+        let { comments } = this.state;
+        comments.push(data);
+        this.setState({ comments: comments, inputVal:''});
       })
       .catch((error) => console.log(error));
-    this.setState((preState) => ({ length: preState.length + 1 }));
   }
 
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
-    const { length } = this.state;
+    const { comments } = this.state;
     let { inputVal } = this.state;
 
     let tmp = [];
-    if (length) {
+    if (comments.length) {
       let i = 0;
-      for (; i < length; i += 1) {
+      for (; i < comments.length; i += 1) {
         tmp.push(this.getComment(i));
       }
     }
@@ -130,7 +131,7 @@ class Comments extends React.Component {
         <ul>
           { tmp }
         </ul>
-        <form className="comment-form" onSubmit={(event) => (this.updatePost(event))}>
+        <form className="comment-form" onSubmit={this.updatePost}>
           <input type="text" value={inputVal} onChange={this.handleChange} />
         </form>
       </div>

@@ -18,18 +18,14 @@ class Post extends React.Component {
   /* Display number of image and post owner of a single post
    */
 
-  static doubleHandle() {
-    Likes.likeHandle();
-    // this.setState((preState) => ({ likeUrl: preState.likeUrl }));
-  }
-
   constructor(props) {
     // Initialize mutable state
     // console.log('post start ctor');
     super(props);
     this.state = {
-      imgUrl: '', owner: '', ownerImgUrl: '', age: '', ownerUrl: '', postUrl: '', likeUrl: '',
+      imgUrl: '', owner: '', ownerImgUrl: '', age: '', ownerUrl: '', postUrl: '', likeUrl: '', doubleClick: 0,
     };
+    this.doubleHandle = this.doubleHandle.bind(this);
   }
 
   componentDidMount() {
@@ -59,11 +55,15 @@ class Post extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  doubleHandle() {
+    this.setState((preState) => ({ doubleClick: preState.doubleClick + 1 }));
+  }
+
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
     const {
-      imgUrl, owner, ownerImgUrl, age, ownerUrl, postUrl, likeUrl, commentsUrl,
+      imgUrl, owner, ownerImgUrl, age, ownerUrl, postUrl, likeUrl, commentsUrl, doubleClick,
     } = this.state;
     // console.log('post render');
     // Render number of post image and post owner
@@ -76,7 +76,7 @@ class Post extends React.Component {
           </a>
           <a href={postUrl} className="sub">{ age }</a>
           <img className="postImage" src={imgUrl} alt="null" onDoubleClick={this.doubleHandle} />
-          <Likes url={likeUrl} />
+          <Likes url={likeUrl} indicator1={doubleClick} />
           <br />
           <br />
           <Comments url={commentsUrl} />

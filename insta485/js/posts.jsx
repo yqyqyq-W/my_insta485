@@ -43,6 +43,12 @@ class Posts extends React.Component {
     // Initialize mutable state
     super(props);
     this.state = { posts: [{ postid: 0, url: '' }], length: 0 };
+    let perfEntries = window.performance.getEntriesByType('Navigation');
+    if (perfEntries === null) {
+      if (perfEntries[0].type === 'back_forward') {
+        window.history.back();
+      }
+    }
   }
 
   componentDidMount() {
@@ -61,6 +67,8 @@ class Posts extends React.Component {
           posts: data.results,
           length: data.results.length,
         });
+        const { posts, length } = this.state;
+        window.history.pushState({ posts, length }, '', url);
         // console.log('setstate success');
       })
       .catch((error) => console.log(error));

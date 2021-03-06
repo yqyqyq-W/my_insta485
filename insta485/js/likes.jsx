@@ -16,7 +16,7 @@ class Likes extends React.Component {
   constructor(props) {
     // Initialize mutable state
     super(props);
-    this.state = { lognameLikes: 0, count: 0 };
+    this.state = { lognameLikes: 0, count: 0, indicator: 0 };
     this.likeHandle = this.likeHandle.bind(this);
     this.unlikeHandle = this.unlikeHandle.bind(this);
   }
@@ -40,16 +40,28 @@ class Likes extends React.Component {
       .catch((error) => console.log(error));
   }
 
+  componentDidUpdate() {
+    const { indicator1 } = this.props;
+    const { indicator } = this.state;
+    if (indicator1 > indicator) {
+      this.likeHandle();
+      this.setState({ indicator: indicator1 });
+    }
+  }
+
   // handler for like&unlike
   unlikeHandle() {
     const { url } = this.props;
     fetch(url, { credentials: 'same-origin', method: 'DELETE' })
       .then((response) => {
+        const { lognameLikes } = this.state;
         if (!response.ok) throw Error(response.statusText);
-        return response.json();
+        if (lognameLikes) {
+          this.setState((preState) => ({ count: preState.count - 1, lognameLikes: 0 }));
+        }
+        return response;
       })
       .catch((error) => console.log(error));
-    this.setState((preState) => ({ count: preState.count - 1 }));
   }
 
   likeHandle() {
@@ -59,10 +71,12 @@ class Likes extends React.Component {
     fetch(url, { credentials: 'same-origin', method: 'POST' })
       .then((response) => {
         if (!response.ok && response.status !== 409) throw Error(response.statusText);
-        return response.json();
+        if (response.status !== 409) {
+          this.setState((preState) => ({ count: preState.count + 1, lognameLikes: 1 }));
+        }
+        return response;
       })
       .catch((error) => console.log(error));
-    this.setState((preState) => ({ count: preState.count + 1 }));
   }
 
   render() {
@@ -93,6 +107,7 @@ class Likes extends React.Component {
 
 Likes.propTypes = {
   url: PropTypes.string.isRequired,
+  indicator1: PropTypes.number.isRequired,
 };
 
 export default Likes;

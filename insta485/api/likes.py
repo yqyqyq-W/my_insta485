@@ -69,14 +69,14 @@ def delete_likes(postid_url_slug):
     cur = connection.execute(
         "SELECT *"
         " FROM likes"
-        " WHERE postid = ? AND owner = ?", (str(postid_url_slug), session['username'])
+        " WHERE postid = ? AND owner = ?", (postid_url_slug, session['username'])
     )
     like_list = cur.fetchall()
-    if not bool(like_list):
+    if bool(like_list):
         cur = connection.execute(
             "DELETE"
             " FROM likes"
-            " WHERE postid = ? AND owner = ?", (str(postid_url_slug), session['username'])
+            " WHERE postid = ? AND owner = ?", (postid_url_slug, session['username'])
         )
     return '', 204
 
@@ -87,19 +87,19 @@ def post_likes(postid_url_slug):
     cur = connection.execute(
         "SELECT *"
         " FROM likes"
-        " WHERE postid = ? AND owner = ?", (str(postid_url_slug), session['username'])
+        " WHERE postid = ? AND owner = ?", (postid_url_slug, session['username'])
     )
     like_list = cur.fetchall()
-    if bool(like_list):
+    if not bool(like_list):
         connection.execute(
             "INSERT INTO likes(owner, postid)"
-            " VALUES (?, ?)", (session['username'], str(postid_url_slug))
+            " VALUES (?, ?)", (session['username'], postid_url_slug)
         )
         context = {
             "logname": session['username'],
             "postid": postid_url_slug,
         }
-        return jsonify(**context), 'CREATED', 201
+        return jsonify(**context), 201
     else:
         context = {
             "logname": session['username'],
@@ -107,5 +107,4 @@ def post_likes(postid_url_slug):
             "postid": postid_url_slug,
             "status_code": 409,
         }
-        # return jsonify(**context), 'CONFLICT', 409
-        return jsonify(**context)
+        return jsonify(**context), 409
