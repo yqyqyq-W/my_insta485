@@ -2,7 +2,8 @@
 import flask
 import insta485
 from insta485.api.error import InvalidUsage
-from flask import request, jsonify
+from insta485.api.comments import check_postid
+from flask import request, jsonify, session
 
 
 @insta485.app.route('/api/v1/p/<int:postid>/', methods=["GET"])
@@ -20,6 +21,9 @@ def get_post(postid):
       "url": "/api/v1/p/1/"
     }
     """
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
+    check_postid(postid)
     connection = insta485.model.get_db()
     cur_context = connection.execute(
         "SELECT *"
@@ -95,7 +99,8 @@ def get_ten_posts():
         ],
         "url": "/api/v1/p/"
     }"""
-
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
     connection = insta485.model.get_db()
     users = flask.session["username"]
     post_size = flask.request.args.get("size", default=10, type=int)

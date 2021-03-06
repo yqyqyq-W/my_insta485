@@ -2,6 +2,8 @@
 import flask
 import insta485
 from flask import request, session, jsonify
+from insta485.api.error import InvalidUsage
+
 
 def check_postid(postid):
     connection = insta485.model.get_db()
@@ -11,7 +13,7 @@ def check_postid(postid):
         " WHERE postid = ?", (postid,)
     )
     if not len(cur_context.fetchall()):
-        raise Exception("Not Found", 404)
+        raise InvalidUsage("Not Found", 404)
 
 
 @insta485.app.route('/api/v1/p/<int:postid>/comments/', methods=["GET"])
@@ -46,6 +48,8 @@ def get_comments(postid):
   "url": "/api/v1/p/3/comments/"
 }
     """
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
     check_postid(postid)
     connection = insta485.model.get_db()
     cur_context = connection.execute(
@@ -97,6 +101,8 @@ def post_comments(postid):
   "url": "/api/v1/p/3/comments/"
 }
     """
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
     check_postid(postid)
 
     connection = insta485.model.get_db()

@@ -1,5 +1,4 @@
 """REST API for error handling."""
-import flask
 import insta485
 from flask import request, session, jsonify
 
@@ -17,6 +16,7 @@ class InvalidUsage(Exception):
     def to_dict(self):
         rv = dict(self.payload or ())
         rv['message'] = self.message
+        rv['status_code'] = self.status_code
         return rv
 
 
@@ -26,13 +26,14 @@ def handle_invalid_usage(error):
     response.status_code = error.status_code
     return response
 
+#
+# @insta485.app.before_request
+# def is_login():
+#     """Check login."""
+#     if 'username' not in session:
+#         if request.endpoint in ['get_likes', 'delete_likes', 'post_likes',
+#                                 'get_post', 'get_comments', 'post_comments',
+#                                 'get_ten_posts']:
+#             raise InvalidUsage('Forbidden', status_code=403)
+#     return None
 
-@insta485.app.before_request
-def is_login():
-    """Check login."""
-    if 'username' not in session:
-        if request.endpoint in ['get_likes', 'delete_likes', 'post_likes',
-                                'get_post', 'get_comments', 'post_comments',
-                                'get_ten_posts']:
-            raise InvalidUsage('Forbidden', status_code=403)
-    return None

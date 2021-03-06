@@ -61,7 +61,7 @@ def compare_password(new_password, old_password):
 def is_login():
     """Get&before request."""
     if 'username' not in session:
-        if request.endpoint in ['index_page', 'show_user',
+        if request.endpoint in ['show_user',
                                 'show_post', 'show_explore',
                                 'show_edit', 'show_password', 'delete',
                                 'logout_op', 'comments_op', 'like_op',
@@ -94,6 +94,8 @@ def login_page():
 @insta485.app.route('/')
 def index_page():
     """Index page."""
+    if 'username' not in session:
+        return redirect(url_for('login_page'))
     config = {}
     connection = insta485.model.get_db()
     config['logname'] = session['username']

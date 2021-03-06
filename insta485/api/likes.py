@@ -2,6 +2,8 @@
 import flask
 import insta485
 from flask import request, session, jsonify
+from insta485.api.error import InvalidUsage
+from insta485.api.comments import check_postid
 
 
 """exception class"""
@@ -41,6 +43,9 @@ from flask import request, session, jsonify
 
 @insta485.app.route('/api/v1/p/<int:postid_url_slug>/likes/', methods=["GET"])
 def get_likes(postid_url_slug):
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
+    check_postid(postid_url_slug)
     counter = 0
     iflike = 0
     connection = insta485.model.get_db()
@@ -65,6 +70,9 @@ def get_likes(postid_url_slug):
 
 @insta485.app.route('/api/v1/p/<int:postid_url_slug>/likes/', methods=["DELETE"])
 def delete_likes(postid_url_slug):
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
+    check_postid(postid_url_slug)
     connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT *"
@@ -83,6 +91,9 @@ def delete_likes(postid_url_slug):
 
 @insta485.app.route('/api/v1/p/<int:postid_url_slug>/likes/', methods=["POST"])
 def post_likes(postid_url_slug):
+    if 'username' not in session:
+        raise InvalidUsage('Forbidden', status_code=403)
+    check_postid(postid_url_slug)
     connection = insta485.model.get_db()
     cur = connection.execute(
         "SELECT *"

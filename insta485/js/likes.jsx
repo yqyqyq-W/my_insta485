@@ -93,12 +93,13 @@ class Likes extends React.Component {
       button = <button type="button" className="like-unlike-button" onClick={this.likeHandle}>like</button>;
     }
 
-    const tmp = (count === 1) ? 'like' : 'likes';
+    const tmp = (count === 1) ? ' like' : ' likes';
+    let countStr = String(count);
+    countStr += tmp;
     return (
     // TODO: button
       <div className="sub">
-        <p>{ count }</p>
-        <p>{ tmp }</p>
+        <p>{ countStr }</p>
         <div>{ button }</div>
       </div>
     );
