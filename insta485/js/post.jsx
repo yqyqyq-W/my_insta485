@@ -41,12 +41,12 @@ class Post extends React.Component {
       })
       .then((data) => {
         // console.log('after fetch');
-        const time = moment(data.age).tz('America/New_York');
+      //  const now = moment().tz('America/New_York').format();
         this.setState({
           imgUrl: data.img_url,
           owner: data.owner,
           ownerImgUrl: data.owner_img_url,
-          age: time.fromNow(),
+          age: moment.duration(moment.utc(data.age, 'YYYY-MM-DD HH:mm:ss').diff(moment.utc())).humanize(true),
           ownerUrl: data.owner_show_url,
           postUrl: data.post_show_url,
           likeUrl: '/api/v1/p/'.concat(postid, '/likes/'),
