@@ -43,8 +43,11 @@ class Likes extends React.Component {
   componentDidUpdate() {
     const { indicator1 } = this.props;
     const { indicator } = this.state;
+    const { lognameLikes } = this.state;
     if (indicator1 > indicator) {
-      this.likeHandle();
+      if (!lognameLikes) {
+        this.likeHandle();
+      }
       this.setState({ indicator: indicator1 });
     }
   }

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Posts from './posts';
 
 class Index extends React.Component {
@@ -10,18 +11,24 @@ class Index extends React.Component {
     // Initialize mutable state
     // console.log('index ctor');
     super(props);
-    this.state = { postsUrl: '' };
-    // if (performance.getEntriesByType('Navigation')[0].type === 'back_forward') {
-    //   window.history.back();
-    // }
+    this.state = {
+      url: '/api/v1/p/',
+      hasMore: true,
+      numPage: 0,
+      numPost: 0,
+    };
+    this.fetchData = this.fetchData.bind(this);
   }
 
   componentDidMount() {
-    // This line automatically assigns this.props.url to the const variable url
-    // console.log('index start get url');
-    const { url } = this.props;
-    // console.log('index get url');
-    // Call REST API to get the post's information
+    // const { url } = this.props;
+    this.fetchData();
+  }
+
+  fetchData() {
+    // const { url } = this.state;
+    const { url, numPage, numPost } = this.state;
+    console.log('start fetch', numPage, numPost);
     fetch(url, { credentials: 'same-origin' })
       .then((response) => {
         // console.log('index response');
@@ -30,12 +37,13 @@ class Index extends React.Component {
       })
       .then((data) => {
         // console.log('index setstate');
-        this.setState({
-          postsUrl: data.posts,
-        });
-        // const { postsUrl } = this.state;
-        // window.history.pushState({ postsUrl }, '', url);
+        this.setState((prestate) => ({
+          hasMore: data.next !== '',
+          numPage: prestate.numPage + 1,
+          numPost: prestate.numPost + data.results.length,
+        }));
         // console.log('index setstate success');
+        window.history.pushState(this.state, null, null);
       })
       .catch((error) => console.log(error));
   }
@@ -44,18 +52,38 @@ class Index extends React.Component {
   render() {
     // This line automatically assigns this.state.imgUrl to the const variable imgUrl
     // and this.state.owner to the const variable owner
-    const { postsUrl } = this.state;
+    const { url, hasMore, numPost } = this.state;
+    const queryString = `${url}?size=${String(numPost)}`;
     // Render number of post image and post owner
     // console.log(postsUrl);
-    if (postsUrl === '') {
-      return (
-      // TODO:infinite scroll
-
-        <h1>Loading</h1>);
-    }
+    // if (postsUrl === '') {
+    //   return (
+    //   // TODO:infinite scroll
+    //
+    //     <h1>Loading</h1>);
+    // }
+    // return (
+    //   <div>
+    //     <Posts url={postsUrl} />
+    //   </div>
+    // );
     return (
       <div>
-        <Posts url={postsUrl} />
+        <InfiniteScroll
+          dataLength={numPost} // This is important field to render the next data
+          next={this.fetchData}
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          endMessage={(
+            <p>
+              <b>Yay! You have seen it all</b>
+            </p>
+              )}
+        >
+
+          <Posts url={queryString} />
+
+        </InfiniteScroll>
       </div>
     );
   }
