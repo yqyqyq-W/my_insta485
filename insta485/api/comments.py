@@ -61,7 +61,7 @@ def post_comments(postid):
         " FROM comments"
     )
     commentid = cur_context.fetchall()
-    commentid = 1 if not commentid else commentid[0]["commentid"] + 1
+    commentid = 1 if len(commentid) == 0 else commentid[0]["commentid"] + 1
 
     context = {
         "commentid": commentid,
